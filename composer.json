@@ -1,0 +1,34 @@
+{
+
+  "name": "monotek/dependency-inject",
+
+  "description": "Tried and tested minimal dependency injection for PHP",
+
+  "keywords": ["monotek", "di", "dependency", "injection", "php", "tiny", "small"],
+
+  "homepage": "https://github.com/titpetric/monotek-dependency-inject",
+
+  "authors": [
+    {
+      "name": "Tit Petric",
+      "email": "tit.petric@monotek.net",
+      "homepage": "http://titpetric.github.io",
+      "role": "developer"
+    }
+  ],
+
+  "license": "MIT",
+
+  "type": "library",
+
+  "require": {
+      "php": ">=5.3.0"
+  },
+
+  "autoload": {
+    "psr-0": {
+      "Monotek\\Dependency": "code"
+    }
+  }
+
+}
