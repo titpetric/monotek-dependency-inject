@@ -30,7 +30,6 @@ class DependencyTest extends PHPUnit_Framework_TestCase
 {
 	public function testInjection()
 	{
-
 		Dependency::set("database", function($title = false) {
 			return new DatabaseMock($title);
 		});
@@ -52,7 +51,6 @@ class DependencyTest extends PHPUnit_Framework_TestCase
 		$test1->setDatabase($db_instantiator("testing"));
 		$this->assertEquals("testing", $test1->get());
 		$this->assertEquals("testing", $test1->getDatabase()->get());
-
 
 		$test1->addInject("sequence");
 		$test1->addInject("sequenceSingleton");
@@ -103,5 +101,35 @@ class DependencyTest extends PHPUnit_Framework_TestCase
 
 		$db = Dependency::get("test", true);
 		$this->assertEquals("testing singleton", $db->get());
+	}
+
+	function testStaticInjection() {
+		Inject::set("database", function($title = false) {
+			return new DatabaseMock($title);
+		});
+
+		Dependency::set("title", "test");
+		Inject::setTitle2("test2");
+
+		$db = Inject::getDatabase("test");
+		$this->assertTrue(is_object($db));
+		$this->assertTrue($db->title === "test");
+
+		$this->assertTrue(Inject::getTitle() === "test");
+		$this->assertTrue(Inject::getTitle2() === "test2");
+
+		try {
+			$a = Inject::getTitle3();
+			$this->assertFalse(true);
+		} catch (\Exception $e) {
+			$this->assertTrue(true);
+		}
+
+		try {
+			$a = Inject::putTitle();
+			$this->assertFalse(true);
+		} catch (\Exception $e) {
+			$this->assertTrue(true);
+		}
 	}
 }

@@ -38,4 +38,26 @@ class Inject
 		}
 		throw new \Exception(sprintf(self::E_INJECT_UNKNOWN, $prefix, $method), 501);
 	}
+
+	public static $sInjectStore;
+	public static function __callStatic($method, $args)
+	{
+		$method = strtolower($method);
+		$prefix = substr($method, 0, 3);
+		$object = substr($method, 3);
+		if ($prefix === "set") {
+			self::$sInjectStore[$object] = $args[0];
+			return;
+		}
+		if ($prefix === "get") {
+			if (!isset(self::$sInjectStore[$object])) {
+				self::$sInjectStore[$object] = Dependency::get($object);
+			}
+			if (is_callable(self::$sInjectStore[$object])) {
+				return call_user_func_array(self::$sInjectStore[$object], $args);
+			}
+			return self::$sInjectStore[$object];
+		}
+		throw new \Exception(sprintf(self::E_INJECT_UNKNOWN, $prefix, $method), 501);
+	}
 }
